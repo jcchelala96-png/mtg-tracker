@@ -1,0 +1,153 @@
+[
+  {
+    "id": "__inbox__",
+    "date": "",
+    "location": "Inbox",
+    "format": "",
+    "matches": [
+      {
+        "id": "245279f3-6514-4981-b76f-3d2a507becff",
+        "opponentName": "",
+        "myDeck": "Hammer Time",
+        "opponentDeck": "Jeskai Blink",
+        "games": [
+          {
+            "onPlay": false,
+            "won": false
+          },
+          {
+            "onPlay": false,
+            "won": false
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "ad84337a-a6c3-415d-a40e-140cbaafa5af",
+        "opponentName": "",
+        "myDeck": "Mono Red",
+        "opponentDeck": "Izzet Murktide",
+        "games": [
+          {
+            "onPlay": true,
+            "won": true
+          },
+          {
+            "onPlay": false,
+            "won": true
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "id": "bf20abe3-6fc4-47ab-9edf-01a0f4e73c5f",
+        "opponentName": "",
+        "myDeck": "Yawgmoth",
+        "opponentDeck": "Hammer Time",
+        "games": [
+          {
+            "onPlay": true,
+            "won": true
+          },
+          {
+            "onPlay": false,
+            "won": true
+          }
+        ],
+        "notes": ""
+      }
+    ]
+  },
+  {
+    "id": "sample-tournament-1",
+    "date": "2025-01-20",
+    "location": "Local Game Store",
+    "format": "Modern",
+    "matches": [
+      {
+        "id": "match-1",
+        "opponentName": "John",
+        "myDeck": "Izzet Murktide",
+        "opponentDeck": "Hammer Time",
+        "games": [
+          {
+            "onPlay": true,
+            "won": true
+          },
+          {
+            "onPlay": false,
+            "won": false
+          },
+          {
+            "onPlay": true,
+            "won": true
+          }
+        ],
+        "notes": "Close games, opponent had bad draws game 3"
+      },
+      {
+        "id": "match-2",
+        "opponentName": "Sarah",
+        "myDeck": "Izzet Murktide",
+        "opponentDeck": "Yawgmoth",
+        "games": [
+          {
+            "onPlay": false,
+            "won": false
+          },
+          {
+            "onPlay": true,
+            "won": false
+          }
+        ],
+        "notes": "Difficult matchup, couldn't find answers"
+      },
+      {
+        "id": "dbb31bcb-f572-4027-ba9b-976edcddb1da",
+        "opponentName": "",
+        "myDeck": "Jeskai Blink",
+        "opponentDeck": "Mono Red",
+        "games": [
+          {
+            "onPlay": true,
+            "won": true
+          },
+          {
+            "onPlay": false,
+            "won": true
+          }
+        ],
+        "notes": ""
+      }
+    ]
+  },
+  {
+    "id": "a0d5995a-4aa9-4b81-bac4-457faebb105a",
+    "date": "2026-02-06",
+    "location": "EXP Card Store",
+    "format": "Modern",
+    "matches": [
+      {
+        "id": "18f66f41-8222-4dbc-a3fc-9f465e73f65e",
+        "opponentName": "",
+        "myDeck": "Yawgmoth",
+        "opponentDeck": "Jeskai Blink",
+        "games": [
+          {
+            "onPlay": true,
+            "won": true
+          },
+          {
+            "onPlay": false,
+            "won": false
+          },
+          {
+            "onPlay": false,
+            "won": false
+          }
+        ],
+        "notes": ""
+      }
+    ]
+  }
+]
