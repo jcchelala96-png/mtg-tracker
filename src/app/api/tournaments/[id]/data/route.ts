@@ -3,10 +3,11 @@ import { getTournamentById } from "@/lib/data";
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const tournament = getTournamentById(params.id);
+    const { id } = await params;
+    const tournament = await getTournamentById(id);
     if (!tournament) {
       return NextResponse.json({ error: "Tournament not found" }, { status: 404 });
     }

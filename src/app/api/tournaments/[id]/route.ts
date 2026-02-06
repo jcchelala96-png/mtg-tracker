@@ -3,10 +3,11 @@ import { deleteTournament } from "@/lib/data";
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    deleteTournament(params.id);
+    const { id } = await params;
+    await deleteTournament(id);
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ error: "Failed to delete tournament" }, { status: 500 });
