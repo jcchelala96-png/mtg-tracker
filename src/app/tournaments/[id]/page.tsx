@@ -69,7 +69,16 @@ export default function TournamentDetailPage({ params }: { params: Promise<{ id:
     <div className="space-y-8">
       <div className="flex justify-between items-start">
         <div>
-          <h1 className="text-3xl font-bold">{tournament.date}</h1>
+          <div className="flex items-center gap-2">
+            <h1 className="text-3xl font-bold">{tournament.date}</h1>
+            <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
+              tournament.gameType === 'Riftbound'
+                ? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200'
+                : 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
+            }`}>
+              {tournament.gameType || 'Magic'}
+            </span>
+          </div>
           <p className="text-muted-foreground">{tournament.location} • {tournament.format}</p>
         </div>
         <AlertDialog>

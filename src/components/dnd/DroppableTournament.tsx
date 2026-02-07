@@ -9,6 +9,7 @@ interface TournamentSummary {
     id: string;
     date: string;
     location: string;
+    gameType: string;
     matchWins: number;
     matchLosses: number;
     gameWins: number;

@@ -45,7 +45,16 @@ export default async function TournamentsPage() {
                   <CardHeader>
                     <div className="flex justify-between items-start">
                       <div>
-                        <CardTitle>{tournament.date}</CardTitle>
+                        <div className="flex items-center gap-2">
+                          <CardTitle>{tournament.date}</CardTitle>
+                          <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
+                            tournament.gameType === 'Riftbound'
+                              ? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200'
+                              : 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
+                          }`}>
+                            {tournament.gameType || 'Magic'}
+                          </span>
+                        </div>
                         <CardDescription>{tournament.location} • {tournament.format}</CardDescription>
                       </div>
                       <div className="text-right">

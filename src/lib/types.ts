@@ -12,11 +12,14 @@ export interface Match {
   notes?: string;
 }
 
+export type GameType = 'Magic' | 'Riftbound';
+
 export interface Tournament {
   id: string;
   date: string;
   location: string;
   format: string;
+  gameType: GameType;
   matches: Match[];
 }
 
@@ -24,6 +27,7 @@ export interface TournamentSummary {
   id: string;
   date: string;
   location: string;
+  gameType: GameType;
   matchWins: number;
   matchLosses: number;
   gameWins: number;

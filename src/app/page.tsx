@@ -18,6 +18,7 @@ export default async function Home() {
       id: t.id,
       date: t.date,
       location: t.location,
+      gameType: t.gameType || 'Magic' as const,
       matchWins: summary.matchWins,
       matchLosses: summary.matchLosses,
       gameWins: summary.gameWins,

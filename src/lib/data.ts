@@ -18,6 +18,7 @@ async function ensureInboxExists() {
       date: '',
       location: 'Inbox',
       format: '',
+      gameType: 'Magic',
       matches: [] // Storing matches as JSONB for now to minimize schema changes MVP
     }]);
   }
@@ -41,7 +42,7 @@ export async function getTournaments(): Promise<Tournament[]> {
     // Fire and forget creation
     ensureInboxExists();
     // Return with fake inbox for now
-    return [{ id: INBOX_ID, date: '', location: 'Inbox', format: '', matches: [] }, ...data];
+    return [{ id: INBOX_ID, date: '', location: 'Inbox', format: '', gameType: 'Magic' as const, matches: [] }, ...data];
   }
 
   return data;

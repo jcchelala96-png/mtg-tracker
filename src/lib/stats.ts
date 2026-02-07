@@ -27,6 +27,7 @@ export function getTournamentSummary(tournament: Tournament): TournamentSummary 
     id: tournament.id,
     date: tournament.date,
     location: tournament.location,
+    gameType: tournament.gameType || 'Magic',
     matchWins,
     matchLosses,
     gameWins,
