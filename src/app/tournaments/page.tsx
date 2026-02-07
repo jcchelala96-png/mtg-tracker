@@ -5,8 +5,9 @@ import { getTournaments } from "@/lib/data";
 import { getTournamentSummary } from "@/lib/stats";
 import { PlusCircle } from "lucide-react";
 
-export default function TournamentsPage() {
-  const tournaments = getTournaments().sort(
+export default async function TournamentsPage() {
+  const allTournaments = await getTournaments();
+  const tournaments = allTournaments.sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   );
 

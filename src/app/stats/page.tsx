@@ -10,8 +10,8 @@ import {
 import WinRateChart from "@/components/stats/WinRateChart";
 import DeckStats from "@/components/stats/DeckStats";
 
-export default function StatsPage() {
-  const tournaments = getTournaments();
+export default async function StatsPage() {
+  const tournaments = await getTournaments();
   const overallStats = calculateOverallStats(tournaments);
   const deckStats = calculateDeckStats(tournaments);
   const playDrawStats = calculatePlayDrawStats(tournaments);
