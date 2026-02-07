@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -21,7 +21,8 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-export default function TournamentDetailPage({ params }: { params: { id: string } }) {
+export default function TournamentDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
   const router = useRouter();
   const [tournament, setTournament] = useState<Tournament | null>(null);
   const [loading, setLoading] = useState(true);
@@ -29,11 +30,11 @@ export default function TournamentDetailPage({ params }: { params: { id: string 
 
   useEffect(() => {
     loadTournament();
-  }, [params.id]);
+  }, [id]);
 
   async function loadTournament() {
     try {
-      const response = await fetch(`/api/tournaments/${params.id}/data`);
+      const response = await fetch(`/api/tournaments/${id}/data`);
       if (response.ok) {
         const data = await response.json();
         setTournament(data);
@@ -47,7 +48,7 @@ export default function TournamentDetailPage({ params }: { params: { id: string 
 
   async function handleDeleteTournament() {
     try {
-      await fetch(`/api/tournaments/${params.id}`, { method: "DELETE" });
+      await fetch(`/api/tournaments/${id}`, { method: "DELETE" });
       router.push("/tournaments");
     } catch (error) {
       console.error("Error deleting tournament:", error);
