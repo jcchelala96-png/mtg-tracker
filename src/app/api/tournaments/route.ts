@@ -5,9 +5,10 @@ import { Tournament } from "@/lib/types";
 export async function POST(request: Request) {
   try {
     const tournament: Tournament = await request.json();
-    saveTournament(tournament);
+    await saveTournament(tournament);
     return NextResponse.json({ success: true });
   } catch (error) {
+    console.error("Error creating tournament:", error);
     return NextResponse.json({ error: "Failed to create tournament" }, { status: 500 });
   }
 }
