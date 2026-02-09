@@ -8,7 +8,7 @@ import { Tournament } from "@/lib/types";
 import { getTournamentSummary } from "@/lib/stats";
 import MatchCard from "@/components/match/MatchCard";
 import MatchForm from "@/components/match/MatchForm";
-import { PlusCircle, Trash2 } from "lucide-react";
+import { PlusCircle, Trash2, Pencil } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -72,26 +72,32 @@ export default function TournamentDetailPage({ params }: { params: Promise<{ id:
           <h1 className="text-3xl font-bold">{tournament.date}</h1>
           <p className="text-muted-foreground">{tournament.location} • {tournament.format}</p>
         </div>
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <Button variant="destructive" size="sm">
-              <Trash2 className="h-4 w-4 mr-2" />
-              Delete Tournament
-            </Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Delete Tournament?</AlertDialogTitle>
-              <AlertDialogDescription>
-                This will permanently delete this tournament and all its matches. This action cannot be undone.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={handleDeleteTournament}>Delete</AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+        <div className="flex gap-2">
+          <Button variant="outline" size="sm" onClick={() => router.push(`/tournaments/${id}/edit`)}>
+            <Pencil className="h-4 w-4 mr-2" />
+            Edit
+          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="destructive" size="sm">
+                <Trash2 className="h-4 w-4 mr-2" />
+                Delete Tournament
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Delete Tournament?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This will permanently delete this tournament and all its matches. This action cannot be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={handleDeleteTournament}>Delete</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">

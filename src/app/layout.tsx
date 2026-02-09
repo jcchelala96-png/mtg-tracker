@@ -7,8 +7,8 @@ import { Toaster } from "sonner";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "MTG Tournament Tracker",
-  description: "Track your Magic: The Gathering tournament results and statistics",
+  title: "TCG Tracker",
+  description: "Track your trading card game tournament results and statistics",
   manifest: "/manifest.json",
 };
 

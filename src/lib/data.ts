@@ -18,6 +18,7 @@ async function ensureInboxExists() {
       date: '',
       location: 'Inbox',
       format: '',
+      gameType: 'Magic',
       matches: [] // Storing matches as JSONB for now to minimize schema changes MVP
     }]);
   }
@@ -35,16 +36,22 @@ export async function getTournaments(): Promise<Tournament[]> {
     return [];
   }
 
+  // Normalize data: ensure all tournaments have gameType
+  const normalized = data.map((t: Tournament) => ({
+    ...t,
+    gameType: t.gameType || 'Magic' as 'Magic' | 'Riftbound'
+  }));
+
   // Ensure we have an inbox locally in the list, if not in DB, create it.
-  const hasInbox = data.some((t: Tournament) => t.id === INBOX_ID);
+  const hasInbox = normalized.some((t: Tournament) => t.id === INBOX_ID);
   if (!hasInbox) {
     // Fire and forget creation
     ensureInboxExists();
     // Return with fake inbox for now
-    return [{ id: INBOX_ID, date: '', location: 'Inbox', format: '', matches: [] }, ...data];
+    return [{ id: INBOX_ID, date: '', location: 'Inbox', format: '', gameType: 'Magic', matches: [] }, ...normalized];
   }
 
-  return data;
+  return normalized;
 }
 
 export async function getTournamentById(id: string): Promise<Tournament | null> {

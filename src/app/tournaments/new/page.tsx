@@ -6,10 +6,18 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function NewTournamentPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [gameType, setGameType] = useState<'Magic' | 'Riftbound'>('Magic');
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -21,6 +29,7 @@ export default function NewTournamentPage() {
       date: formData.get("date") as string,
       location: formData.get("location") as string,
       format: formData.get("format") as string,
+      gameType: gameType,
       matches: [],
     };
 
@@ -72,6 +81,19 @@ export default function NewTournamentPage() {
                 required
                 defaultValue="Local Game Store"
               />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="gameType">Game Type</Label>
+              <Select value={gameType} onValueChange={(value) => setGameType(value as 'Magic' | 'Riftbound')}>
+                <SelectTrigger id="gameType">
+                  <SelectValue placeholder="Select game type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Magic">Magic</SelectItem>
+                  <SelectItem value="Riftbound">Riftbound</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="space-y-2">

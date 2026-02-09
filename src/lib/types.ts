@@ -17,6 +17,7 @@ export interface Tournament {
   date: string;
   location: string;
   format: string;
+  gameType?: 'Magic' | 'Riftbound';
   matches: Match[];
 }
 
@@ -24,6 +25,7 @@ export interface TournamentSummary {
   id: string;
   date: string;
   location: string;
+  gameType: 'Magic' | 'Riftbound';
   matchWins: number;
   matchLosses: number;
   gameWins: number;

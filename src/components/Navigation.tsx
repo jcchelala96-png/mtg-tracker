@@ -18,7 +18,7 @@ export default function Navigation() {
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center space-x-8">
           <Link href="/" className="font-bold text-xl">
-            MTG Tracker
+            TCG Tracker
           </Link>
           <div className="flex space-x-6">
             {links.map((link) => (
