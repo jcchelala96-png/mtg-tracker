@@ -36,13 +36,15 @@ export function DraggableMatch({ match, onEdit }: DraggableMatchProps) {
         <div
             ref={setNodeRef}
             style={style}
-            className={`flex items-center justify-between p-2 rounded-lg bg-background cursor-grab active:cursor-grabbing ${isDragging ? "ring-2 ring-primary shadow-lg" : ""
+            className={`flex items-center justify-between p-3 rounded-lg bg-background cursor-grab active:cursor-grabbing touch-none select-none ${isDragging ? "ring-2 ring-primary shadow-lg z-50" : "hover:bg-accent/50"
                 }`}
             {...listeners}
             {...attributes}
         >
-            <div className="flex items-center gap-2">
-                <GripVertical className="h-4 w-4 text-muted-foreground" />
+            <div className="flex items-center gap-3">
+                <div className="p-2 -m-1 touch-none">
+                    <GripVertical className="h-5 w-5 text-muted-foreground" />
+                </div>
                 <div>
                     <span className="font-medium">{match.myDeck}</span>
                     <span className="text-muted-foreground"> vs </span>
@@ -56,13 +58,14 @@ export function DraggableMatch({ match, onEdit }: DraggableMatchProps) {
                 <Button
                     variant="ghost"
                     size="icon"
-                    className="h-8 w-8 text-muted-foreground hover:text-foreground"
+                    className="h-10 w-10 text-muted-foreground hover:text-foreground"
                     onClick={(e) => {
                         e.stopPropagation();
                         onEdit(match);
                     }}
                     onMouseDown={(e) => e.stopPropagation()}
                     onTouchStart={(e) => e.stopPropagation()}
+                    onPointerDown={(e) => e.stopPropagation()}
                 >
                     <Edit2 className="h-4 w-4" />
                 </Button>

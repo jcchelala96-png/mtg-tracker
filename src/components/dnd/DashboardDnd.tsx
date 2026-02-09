@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { DndContext, DragEndEvent, DragOverlay, PointerSensor, useSensor, useSensors, TouchSensor } from "@dnd-kit/core";
+import { DndContext, DragEndEvent, DragOverlay, PointerSensor, useSensor, useSensors, TouchSensor, KeyboardSensor } from "@dnd-kit/core";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -65,10 +65,11 @@ export function DashboardDnd({ initialInboxMatches, tournamentSummaries }: Dashb
         }),
         useSensor(TouchSensor, {
             activationConstraint: {
-                delay: 250,
-                tolerance: 5,
+                delay: 150, // Reduced from 250ms for faster response
+                tolerance: 10, // Increased from 5px for easier touch activation
             },
-        })
+        }),
+        useSensor(KeyboardSensor)
     );
 
     const handleDragStart = (event: any) => {
