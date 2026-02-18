@@ -16,7 +16,7 @@ import {
 import { useOfflineMutation } from "@/hooks/useOfflineMutation";
 import { Loader2, Check } from "lucide-react";
 
-const RESULT_OPTIONS = ["2-0", "2-1", "1-2", "0-2", "1-0", "0-1"];
+const RESULT_OPTIONS = ["2-0", "2-1", "1-1", "1-2", "0-2", "1-0", "0-1"];
 
 interface QuickAddDialogProps {
     open: boolean;
