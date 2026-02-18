@@ -86,7 +86,7 @@ export default function MatchCard({ match, tournamentId, onUpdate }: MatchCardPr
         <CardContent>
           <div className="space-y-2">
             <div className="text-sm">
-              {match.games.map((game, index) => (
+              {(match.games || []).map((game, index) => (
                 <div key={index} className="flex gap-2">
                   <span className="font-medium">Game {index + 1}:</span>
                   <span>{game.onPlay ? "On Play" : "On Draw"}</span>

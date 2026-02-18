@@ -133,7 +133,7 @@ export default function TournamentDetailPage({ params }: { params: Promise<{ id:
           </Button>
         </div>
 
-        {tournament.matches.length === 0 ? (
+        {(tournament.matches || []).length === 0 ? (
           <Card>
             <CardContent className="py-8 text-center text-muted-foreground">
               No matches yet. Add your first match to get started!
@@ -141,7 +141,7 @@ export default function TournamentDetailPage({ params }: { params: Promise<{ id:
           </Card>
         ) : (
           <div className="space-y-4">
-            {tournament.matches.map((match) => (
+            {(tournament.matches || []).map((match) => (
               <MatchCard
                 key={match.id}
                 match={match}
