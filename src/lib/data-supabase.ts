@@ -25,6 +25,13 @@ export async function ensureInboxExists() {
 
 // --- Data Access ---
 
+// --- Helper to ensure array ---
+function ensureArray<T>(item: any): T[] {
+    return Array.isArray(item) ? item : [];
+}
+
+// --- Data Access ---
+
 export async function getTournaments(): Promise<Tournament[]> {
     if (!process.env.NEXT_PUBLIC_SUPABASE_URL) return [];
 
@@ -34,11 +41,15 @@ export async function getTournaments(): Promise<Tournament[]> {
         return [];
     }
 
-    // Normalize data: ensure all tournaments have gameType
-    const normalized = data.map((t: Tournament) => ({
+    // Normalize data: ensure all tournaments have gameType and matches is strictly an array
+    const normalized = data.map((t: any) => ({
         ...t,
-        gameType: t.gameType || 'Magic' as 'Magic' | 'Riftbound'
-    }));
+        gameType: t.gameType || 'Magic',
+        matches: ensureArray<Match>(t.matches).map((m: any) => ({
+            ...m,
+            games: ensureArray(m.games)
+        }))
+    })) as Tournament[];
 
     const hasInbox = normalized.some((t: Tournament) => t.id === INBOX_ID);
     if (!hasInbox) {
@@ -58,7 +69,13 @@ export async function getTournamentById(id: string): Promise<Tournament | null> 
 
     if (error) return null;
     if (data) {
-        data.matches = data.matches || [];
+        // Fix strict null check and type safety
+        const safeData = data as any;
+        safeData.matches = ensureArray<Match>(safeData.matches).map((m: any) => ({
+            ...m,
+            games: ensureArray(m.games)
+        }));
+        return safeData as Tournament;
     }
     return data;
 }
@@ -134,7 +151,7 @@ export async function getAllDeckNames(): Promise<string[]> {
     const tournaments = await getTournaments();
     const deckNames = new Set<string>();
     tournaments.forEach(tournament => {
-        tournament.matches.forEach(match => {
+        ensureArray<Match>(tournament.matches).forEach(match => {
             if (match.myDeck) deckNames.add(match.myDeck);
             if (match.opponentDeck) deckNames.add(match.opponentDeck);
         });

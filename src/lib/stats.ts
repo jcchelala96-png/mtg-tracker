@@ -1,7 +1,7 @@
 import { Tournament, Match, DeckStats, PlayDrawStats, MatchupStats, TournamentSummary } from './types';
 
 export function calculateMatchResult(match: Match): { wins: number; losses: number; won: boolean } {
-  const games = match.games || [];
+  const games = Array.isArray(match.games) ? match.games : [];
   const wins = games.filter(g => g.won).length;
   const losses = games.filter(g => !g.won).length;
   return { wins, losses, won: wins > losses };
@@ -13,7 +13,7 @@ export function getTournamentSummary(tournament: Tournament): TournamentSummary 
   let gameWins = 0;
   let gameLosses = 0;
 
-  (tournament.matches || []).forEach(match => {
+  (Array.isArray(tournament.matches) ? tournament.matches : []).forEach(match => {
     const result = calculateMatchResult(match);
     if (result.won) {
       matchWins++;
@@ -66,7 +66,7 @@ export function calculateDeckStats(tournaments: Tournament[]): DeckStats[] {
   const deckMap = new Map<string, { wins: number; losses: number }>();
 
   tournaments.forEach(tournament => {
-    (tournament.matches || []).forEach(match => {
+    (Array.isArray(tournament.matches) ? tournament.matches : []).forEach(match => {
       const result = calculateMatchResult(match);
       const current = deckMap.get(match.myDeck) || { wins: 0, losses: 0 };
 
@@ -98,8 +98,8 @@ export function calculatePlayDrawStats(tournaments: Tournament[]): PlayDrawStats
   let onDrawTotal = 0;
 
   tournaments.forEach(tournament => {
-    (tournament.matches || []).forEach(match => {
-      (match.games || []).forEach(game => {
+    (Array.isArray(tournament.matches) ? tournament.matches : []).forEach(match => {
+      (Array.isArray(match.games) ? match.games : []).forEach(game => {
         if (game.onPlay) {
           onPlayTotal++;
           if (game.won) onPlayWins++;
@@ -125,7 +125,7 @@ export function calculateMatchupStats(tournaments: Tournament[]): MatchupStats[]
   const matchupMap = new Map<string, { wins: number; losses: number }>();
 
   tournaments.forEach(tournament => {
-    (tournament.matches || []).forEach(match => {
+    (Array.isArray(tournament.matches) ? tournament.matches : []).forEach(match => {
       if (!match.opponentDeck) return;
 
       const result = calculateMatchResult(match);
