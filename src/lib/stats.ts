@@ -14,6 +14,7 @@ export function getTournamentSummary(tournament: Tournament): TournamentSummary 
   let gameLosses = 0;
 
   (Array.isArray(tournament.matches) ? tournament.matches : []).forEach(match => {
+    if (!match) return;
     const result = calculateMatchResult(match);
     if (result.won) {
       matchWins++;
@@ -67,6 +68,7 @@ export function calculateDeckStats(tournaments: Tournament[]): DeckStats[] {
 
   tournaments.forEach(tournament => {
     (Array.isArray(tournament.matches) ? tournament.matches : []).forEach(match => {
+      if (!match) return;
       const result = calculateMatchResult(match);
       const current = deckMap.get(match.myDeck) || { wins: 0, losses: 0 };
 
@@ -99,6 +101,7 @@ export function calculatePlayDrawStats(tournaments: Tournament[]): PlayDrawStats
 
   tournaments.forEach(tournament => {
     (Array.isArray(tournament.matches) ? tournament.matches : []).forEach(match => {
+      if (!match) return;
       (Array.isArray(match.games) ? match.games : []).forEach(game => {
         if (game.onPlay) {
           onPlayTotal++;
@@ -126,6 +129,7 @@ export function calculateMatchupStats(tournaments: Tournament[]): MatchupStats[]
 
   tournaments.forEach(tournament => {
     (Array.isArray(tournament.matches) ? tournament.matches : []).forEach(match => {
+      if (!match) return;
       if (!match.opponentDeck) return;
 
       const result = calculateMatchResult(match);

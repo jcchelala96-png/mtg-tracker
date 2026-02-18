@@ -45,7 +45,7 @@ export async function getTournaments(): Promise<Tournament[]> {
     const normalized = data.map((t: any) => ({
         ...t,
         gameType: t.gameType || 'Magic',
-        matches: ensureArray<Match>(t.matches).map((m: any) => ({
+        matches: ensureArray<Match>(t.matches).filter(Boolean).map((m: any) => ({
             ...m,
             games: ensureArray(m.games)
         }))
@@ -71,7 +71,7 @@ export async function getTournamentById(id: string): Promise<Tournament | null> 
     if (data) {
         // Fix strict null check and type safety
         const safeData = data as any;
-        safeData.matches = ensureArray<Match>(safeData.matches).map((m: any) => ({
+        safeData.matches = ensureArray<Match>(safeData.matches).filter(Boolean).map((m: any) => ({
             ...m,
             games: ensureArray(m.games)
         }));

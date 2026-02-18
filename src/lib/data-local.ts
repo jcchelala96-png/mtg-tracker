@@ -11,14 +11,33 @@ function ensureDataDir() {
     }
 }
 
+// --- Helper to ensure array ---
+function ensureArray<T>(item: any): T[] {
+    return Array.isArray(item) ? item : [];
+}
+
 function readData(): Tournament[] {
     ensureDataDir();
     if (!fs.existsSync(DATA_FILE)) {
         fs.writeFileSync(DATA_FILE, JSON.stringify([], null, 2));
         return [];
     }
-    const raw = fs.readFileSync(DATA_FILE, 'utf-8');
-    return JSON.parse(raw) as Tournament[];
+    try {
+        const raw = fs.readFileSync(DATA_FILE, 'utf-8');
+        const data = JSON.parse(raw);
+        if (!Array.isArray(data)) return [];
+
+        return data.map((t: any) => ({
+            ...t,
+            matches: ensureArray(t.matches).filter(Boolean).map((m: any) => ({
+                ...m,
+                games: ensureArray(m.games)
+            }))
+        }));
+    } catch (e) {
+        console.error("Error reading local data:", e);
+        return [];
+    }
 }
 
 function writeData(tournaments: Tournament[]) {

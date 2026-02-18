@@ -141,7 +141,7 @@ export default function TournamentDetailPage({ params }: { params: Promise<{ id:
           </Card>
         ) : (
           <div className="space-y-4">
-            {(Array.isArray(tournament.matches) ? tournament.matches : []).map((match) => (
+            {(Array.isArray(tournament.matches) ? tournament.matches : []).filter(Boolean).map((match) => (
               <MatchCard
                 key={match.id}
                 match={match}
