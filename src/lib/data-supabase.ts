@@ -4,7 +4,7 @@ import { Tournament, Match } from './types';
 const INBOX_ID = '__inbox__';
 
 // --- Helper to ensure Inbox exists ---
-async function ensureInboxExists() {
+export async function ensureInboxExists() {
     const { data } = await supabase
         .from('tournaments')
         .select('*')
@@ -42,7 +42,7 @@ export async function getTournaments(): Promise<Tournament[]> {
 
     const hasInbox = normalized.some((t: Tournament) => t.id === INBOX_ID);
     if (!hasInbox) {
-        ensureInboxExists();
+        await ensureInboxExists();
         return [{ id: INBOX_ID, date: '', location: 'Inbox', format: '', gameType: 'Magic', matches: [] }, ...normalized];
     }
 
@@ -75,7 +75,14 @@ export async function deleteTournament(id: string): Promise<void> {
 // --- Match Operations ---
 
 export async function addMatch(tournamentId: string, match: Match): Promise<void> {
-    const tournament = await getTournamentById(tournamentId);
+    let tournament = await getTournamentById(tournamentId);
+
+    // Check if we are trying to add to a non-existent inbox
+    if (!tournament && tournamentId === INBOX_ID) {
+        await ensureInboxExists();
+        tournament = await getTournamentById(tournamentId);
+    }
+
     if (!tournament) return;
     tournament.matches.push(match);
     await saveTournament(tournament);

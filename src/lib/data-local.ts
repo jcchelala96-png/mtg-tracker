@@ -26,14 +26,37 @@ function writeData(tournaments: Tournament[]) {
     fs.writeFileSync(DATA_FILE, JSON.stringify(tournaments, null, 2));
 }
 
+// --- Helper to ensure Inbox exists ---
+function ensureInboxExists(tournaments: Tournament[]) {
+    const hasInbox = tournaments.some(t => t.id === '__inbox__');
+    if (!hasInbox) {
+        tournaments.unshift({
+            id: '__inbox__',
+            date: '',
+            location: 'Inbox',
+            format: '',
+            gameType: 'Magic',
+            matches: []
+        });
+        writeData(tournaments);
+    }
+}
+
 // --- Data Access ---
 
 export async function getTournaments(): Promise<Tournament[]> {
-    return readData();
+    const tournaments = readData();
+    ensureInboxExists(tournaments);
+    return tournaments;
 }
 
 export async function getTournamentById(id: string): Promise<Tournament | null> {
     const tournaments = readData();
+    // Ensure inbox exists if requested
+    if (id === '__inbox__') {
+        ensureInboxExists(tournaments);
+        return tournaments.find(t => t.id === id) || null;
+    }
     return tournaments.find(t => t.id === id) || null;
 }
 
@@ -56,7 +79,16 @@ export async function deleteTournament(id: string): Promise<void> {
 // --- Match Operations ---
 
 export async function addMatch(tournamentId: string, match: Match): Promise<void> {
-    const tournament = await getTournamentById(tournamentId);
+    let tournament = await getTournamentById(tournamentId);
+
+    // Check if we are trying to add to a non-existent inbox
+    if (!tournament && tournamentId === '__inbox__') {
+        // Force create inbox
+        const tournaments = readData();
+        ensureInboxExists(tournaments);
+        tournament = tournaments.find(t => t.id === '__inbox__') || null;
+    }
+
     if (!tournament) return;
     tournament.matches.push(match);
     await saveTournament(tournament);
