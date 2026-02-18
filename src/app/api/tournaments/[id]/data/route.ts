@@ -11,6 +11,8 @@ export async function GET(
     if (!tournament) {
       return NextResponse.json({ error: "Tournament not found" }, { status: 404 });
     }
+    // Ensure matches is always an array
+    tournament.matches = tournament.matches || [];
     return NextResponse.json(tournament);
   } catch (error) {
     return NextResponse.json({ error: "Failed to fetch tournament" }, { status: 500 });

@@ -57,6 +57,9 @@ export async function getTournamentById(id: string): Promise<Tournament | null> 
         .single();
 
     if (error) return null;
+    if (data) {
+        data.matches = data.matches || [];
+    }
     return data;
 }
 
