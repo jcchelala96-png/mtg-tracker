@@ -4,67 +4,92 @@ export const INBOX_ID = '__inbox__';
 
 const isDev = process.env.NODE_ENV === 'development';
 
-// Dynamically import the right data layer
-async function getDataLayer() {
-  if (isDev) {
-    return await import('./data-local');
-  } else {
-    return await import('./data-supabase');
-  }
-}
+// We conditionally import at the top level to avoid dynamic import issues
+// with Next.js bundling. The fs-based local layer is only used in development.
+import * as supabaseLayer from './data-supabase';
 
 // --- Data Access ---
 
 export async function getTournaments(): Promise<Tournament[]> {
-  const layer = await getDataLayer();
-  return layer.getTournaments();
+  if (isDev) {
+    const localLayer = await import('./data-local');
+    return localLayer.getTournaments();
+  }
+  return supabaseLayer.getTournaments();
 }
 
 export async function getTournamentById(id: string): Promise<Tournament | null> {
-  const layer = await getDataLayer();
-  return layer.getTournamentById(id);
+  if (isDev) {
+    const localLayer = await import('./data-local');
+    return localLayer.getTournamentById(id);
+  }
+  return supabaseLayer.getTournamentById(id);
 }
 
 export async function saveTournament(tournament: Tournament): Promise<void> {
-  const layer = await getDataLayer();
-  return layer.saveTournament(tournament);
+  if (isDev) {
+    const localLayer = await import('./data-local');
+    return localLayer.saveTournament(tournament);
+  }
+  return supabaseLayer.saveTournament(tournament);
 }
 
 export async function deleteTournament(id: string): Promise<void> {
-  const layer = await getDataLayer();
-  return layer.deleteTournament(id);
+  if (isDev) {
+    const localLayer = await import('./data-local');
+    return localLayer.deleteTournament(id);
+  }
+  return supabaseLayer.deleteTournament(id);
 }
 
 // --- Match Operations ---
 
 export async function addMatch(tournamentId: string, match: Match): Promise<void> {
-  const layer = await getDataLayer();
-  return layer.addMatch(tournamentId, match);
+  if (isDev) {
+    const localLayer = await import('./data-local');
+    return localLayer.addMatch(tournamentId, match);
+  }
+  return supabaseLayer.addMatch(tournamentId, match);
 }
 
 export async function updateMatch(tournamentId: string, matchId: string, updatedMatch: Match): Promise<void> {
-  const layer = await getDataLayer();
-  return layer.updateMatch(tournamentId, matchId, updatedMatch);
+  if (isDev) {
+    const localLayer = await import('./data-local');
+    return localLayer.updateMatch(tournamentId, matchId, updatedMatch);
+  }
+  return supabaseLayer.updateMatch(tournamentId, matchId, updatedMatch);
 }
 
 export async function deleteMatch(tournamentId: string, matchId: string): Promise<void> {
-  const layer = await getDataLayer();
-  return layer.deleteMatch(tournamentId, matchId);
+  if (isDev) {
+    const localLayer = await import('./data-local');
+    return localLayer.deleteMatch(tournamentId, matchId);
+  }
+  return supabaseLayer.deleteMatch(tournamentId, matchId);
 }
 
 // --- Helpers ---
 
 export async function getInboxMatches(): Promise<Match[]> {
-  const layer = await getDataLayer();
-  return layer.getInboxMatches();
+  if (isDev) {
+    const localLayer = await import('./data-local');
+    return localLayer.getInboxMatches();
+  }
+  return supabaseLayer.getInboxMatches();
 }
 
 export async function moveMatch(matchId: string, fromTournamentId: string, toTournamentId: string): Promise<boolean> {
-  const layer = await getDataLayer();
-  return layer.moveMatch(matchId, fromTournamentId, toTournamentId);
+  if (isDev) {
+    const localLayer = await import('./data-local');
+    return localLayer.moveMatch(matchId, fromTournamentId, toTournamentId);
+  }
+  return supabaseLayer.moveMatch(matchId, fromTournamentId, toTournamentId);
 }
 
 export async function getAllDeckNames(): Promise<string[]> {
-  const layer = await getDataLayer();
-  return layer.getAllDeckNames();
+  if (isDev) {
+    const localLayer = await import('./data-local');
+    return localLayer.getAllDeckNames();
+  }
+  return supabaseLayer.getAllDeckNames();
 }
