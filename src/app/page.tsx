@@ -2,6 +2,8 @@ import { getTournaments, getInboxMatches, INBOX_ID } from "@/lib/data";
 import { calculateOverallStats, getTournamentSummary } from "@/lib/stats";
 import { DashboardClient } from "@/components/DashboardClient";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const allTournaments = await getTournaments();
   const tournaments = allTournaments.filter(t => t.id !== INBOX_ID);

@@ -45,7 +45,7 @@ export default function OrganizePage() {
             ]);
             const inboxData = await inboxRes.json();
             const tournamentsData = await tournamentsRes.json();
-            setInboxMatches(inboxData.tournament?.matches || []);
+            setInboxMatches(inboxData.matches || []);
             setTournaments(tournamentsData.tournaments || []);
         } catch (err) {
             console.error(err);

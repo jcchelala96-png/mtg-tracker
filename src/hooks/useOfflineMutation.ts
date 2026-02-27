@@ -82,10 +82,26 @@ export function useOfflineMutation() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(body),
             });
-            if (!res.ok) throw new Error('Request failed');
-            return await res.json();
+
+            let payload: any = null;
+            try {
+                payload = await res.json();
+            } catch {
+                payload = null;
+            }
+
+            // HTTP errors are server/application errors, not offline/network failures.
+            if (!res.ok) {
+                return {
+                    success: false,
+                    error: payload?.error || `Request failed with status ${res.status}`,
+                    status: res.status,
+                };
+            }
+
+            return payload ?? { success: true };
         } catch (error) {
-            // If fetch fails (maybe connection dropped mid-request), queue it
+            // Fetch threw before receiving a response (offline/network error): queue it.
             console.error('Fetch failed, queuing', error);
             const queue: QueuedMutation[] = JSON.parse(localStorage.getItem('offlineQueue') || '[]');
             queue.push({
