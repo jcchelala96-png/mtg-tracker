@@ -31,6 +31,7 @@ interface MatchFormProps {
 
 export default function MatchForm({ tournamentId, match, onClose, onSave }: MatchFormProps) {
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [deckNames, setDeckNames] = useState<string[]>([]);
   const [games, setGames] = useState(
     match?.games || [
@@ -49,6 +50,7 @@ export default function MatchForm({ tournamentId, match, onClose, onSave }: Matc
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
+    setErrorMessage(null);
 
     const formData = new FormData(e.currentTarget);
     const matchData = {
@@ -61,16 +63,29 @@ export default function MatchForm({ tournamentId, match, onClose, onSave }: Matc
     };
 
     try {
-      await fetch(`/api/tournaments/${tournamentId}/matches`, {
+      const response = await fetch(`/api/tournaments/${tournamentId}/matches`, {
         method: match ? "PUT" : "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(matchData),
       });
 
+      if (!response.ok) {
+        let message = "Failed to save match";
+        try {
+          const payload = await response.json();
+          if (payload?.error) message = payload.error;
+        } catch {
+          // Ignore non-JSON error payloads
+        }
+        throw new Error(message);
+      }
+
       onSave();
       onClose();
     } catch (error) {
+      const message = error instanceof Error ? error.message : "Error saving match";
       console.error("Error saving match:", error);
+      setErrorMessage(message);
     } finally {
       setLoading(false);
     }
@@ -202,6 +217,10 @@ export default function MatchForm({ tournamentId, match, onClose, onSave }: Matc
               Cancel
             </Button>
           </div>
+
+          {errorMessage && (
+            <p className="text-sm text-red-600">{errorMessage}</p>
+          )}
         </form>
       </DialogContent>
     </Dialog>

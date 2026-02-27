@@ -12,7 +12,8 @@ export async function POST(
     await addMatch(id, match);
     return NextResponse.json({ success: true });
   } catch (error) {
-    return NextResponse.json({ error: "Failed to add match" }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Failed to add match";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
@@ -26,7 +27,8 @@ export async function PUT(
     await updateMatch(id, match.id, match);
     return NextResponse.json({ success: true });
   } catch (error) {
-    return NextResponse.json({ error: "Failed to update match" }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Failed to update match";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
@@ -44,6 +46,7 @@ export async function DELETE(
     await deleteMatch(id, matchId);
     return NextResponse.json({ success: true });
   } catch (error) {
-    return NextResponse.json({ error: "Failed to delete match" }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Failed to delete match";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

@@ -2,17 +2,22 @@ import { supabase } from './supabase';
 import { Tournament, Match } from './types';
 
 const INBOX_ID = '__inbox__';
+const NO_ROWS_CODE = 'PGRST116';
 
 // --- Helper to ensure Inbox exists ---
 export async function ensureInboxExists() {
-    const { data } = await supabase
+    const { data, error } = await supabase
         .from('tournaments')
         .select('*')
         .eq('id', INBOX_ID)
-        .single();
+        .maybeSingle();
+
+    if (error) {
+        throw new Error(`Failed to check inbox: ${error.message}`);
+    }
 
     if (!data) {
-        await supabase.from('tournaments').insert([{
+        const { error: insertError } = await supabase.from('tournaments').insert([{
             id: INBOX_ID,
             date: '',
             location: 'Inbox',
@@ -20,6 +25,9 @@ export async function ensureInboxExists() {
             gameType: 'Magic',
             matches: []
         }]);
+        if (insertError) {
+            throw new Error(`Failed to create inbox: ${insertError.message}`);
+        }
     }
 }
 
@@ -67,7 +75,10 @@ export async function getTournamentById(id: string): Promise<Tournament | null> 
         .eq('id', id)
         .single();
 
-    if (error) return null;
+    if (error) {
+        if (error.code === NO_ROWS_CODE) return null;
+        throw new Error(`Failed to fetch tournament ${id}: ${error.message}`);
+    }
     if (data) {
         // Fix strict null check and type safety
         const safeData = data as any;
@@ -85,11 +96,16 @@ export async function saveTournament(tournament: Tournament): Promise<void> {
         .from('tournaments')
         .upsert(tournament);
 
-    if (error) console.error('Save tournament error:', error);
+    if (error) {
+        throw new Error(`Failed to save tournament ${tournament.id}: ${error.message}`);
+    }
 }
 
 export async function deleteTournament(id: string): Promise<void> {
-    await supabase.from('tournaments').delete().eq('id', id);
+    const { error } = await supabase.from('tournaments').delete().eq('id', id);
+    if (error) {
+        throw new Error(`Failed to delete tournament ${id}: ${error.message}`);
+    }
 }
 
 // --- Match Operations ---
@@ -103,25 +119,36 @@ export async function addMatch(tournamentId: string, match: Match): Promise<void
         tournament = await getTournamentById(tournamentId);
     }
 
-    if (!tournament) return;
+    if (!tournament) {
+        throw new Error(`Tournament not found: ${tournamentId}`);
+    }
     tournament.matches.push(match);
     await saveTournament(tournament);
 }
 
 export async function updateMatch(tournamentId: string, matchId: string, updatedMatch: Match): Promise<void> {
     const tournament = await getTournamentById(tournamentId);
-    if (!tournament) return;
-    const index = tournament.matches.findIndex(m => m.id === matchId);
-    if (index >= 0) {
-        tournament.matches[index] = updatedMatch;
-        await saveTournament(tournament);
+    if (!tournament) {
+        throw new Error(`Tournament not found: ${tournamentId}`);
     }
+    const index = tournament.matches.findIndex(m => m.id === matchId);
+    if (index < 0) {
+        throw new Error(`Match not found: ${matchId}`);
+    }
+    tournament.matches[index] = updatedMatch;
+    await saveTournament(tournament);
 }
 
 export async function deleteMatch(tournamentId: string, matchId: string): Promise<void> {
     const tournament = await getTournamentById(tournamentId);
-    if (!tournament) return;
+    if (!tournament) {
+        throw new Error(`Tournament not found: ${tournamentId}`);
+    }
+    const originalSize = tournament.matches.length;
     tournament.matches = tournament.matches.filter(m => m.id !== matchId);
+    if (tournament.matches.length === originalSize) {
+        throw new Error(`Match not found: ${matchId}`);
+    }
     await saveTournament(tournament);
 }
 
